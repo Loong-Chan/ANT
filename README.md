@@ -1,2 +1,2 @@
-# D3G
-Implementation of the paper "Unbiased Node Alignment for Relieving Distribution Shift"
+# ANT
+Implementation of the paper "Adaptable Node Alignment for Relieving Distribution Shift on Graphs"
