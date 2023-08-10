@@ -7,3 +7,5 @@ Generate a dataset with feature shifts:
 ```bash
 python make_dataset.py {DATASET}
 ```
+
+**Step 2**
