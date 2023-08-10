@@ -68,3 +68,9 @@ def processed_dataset(dataset_name, device):
     edge_index = edge_index.to(device)
 
     return adj, features, labels, idx_train, idx_val, idx_test, environment, edge_index
+
+
+if __name__ == "__main__":
+    import sys 
+    dataset = sys.argv[1]
+    create_raw_dataset(dataset)
