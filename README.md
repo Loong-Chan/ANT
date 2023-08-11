@@ -12,3 +12,7 @@ python make_dataset.py photo
 ```
 
 **Step 2**
+Use pre-trained models to validate performance on 6 backbone models and the Cora and Photo datasets:
+```bash
+bash run.sh
+```
