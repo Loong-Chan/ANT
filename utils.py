@@ -8,33 +8,6 @@ import torch.nn.functional as F
 import random
 
 
-def biRandVec(dim, cos_theta):
-    u = np.random.rand(dim)
-    v = np.random.rand(dim)
-    u_len = np.linalg.norm(u)
-    v_len = np.linalg.norm(v)
-    u_norm = u / u_len
-    v_norm = v / v_len
-    cos_u_v = np.dot(u_norm, v_norm)
-    u_proj_v = u_len * cos_u_v * v_norm
-    u_perp_v = u - u_proj_v
-    u_proj_v_len = np.linalg.norm(u_proj_v)
-    u_perp_v_len = np.linalg.norm(u_perp_v)
-    u_perp_v_norm = u_perp_v / u_perp_v_len
-    sin_theta = (1 - cos_theta**2)**0.5
-    tan_theta = sin_theta / cos_theta
-    w_perp_v_len = u_proj_v_len * tan_theta
-    w = u_proj_v + w_perp_v_len * u_perp_v_norm
-    w_norm = w / np.linalg.norm(w)
-    return np.array([v_norm, w_norm])
-
-
-def mutiRandVec(n, dim):
-    randVecs = np.random.uniform(-1, 1, size=(n, dim))
-    norm = np.expand_dims(np.linalg.norm(randVecs, axis=1), axis=1)
-    return randVecs / norm
-
-
 def tensor_rownorm(tensor):
     r_inv = tensor.sum(dim=1).pow(-1)
     r_inv[r_inv == float("Inf")] = 0.
@@ -159,28 +132,7 @@ def consis_loss(logps, temp):
         loss += torch.mean((p-sharp_p).pow(2).sum(1))
     loss = loss/len(ps)
     return loss
-
-
-def create_bias(adj, features, shift_type, degree, train_part="l"):
-
-    nnode = adj.shape[0]
-    part = int(nnode *  0.05)
-
-    env = (torch.FloatTensor(range(nnode)) / nnode * 5).to(torch.int64)
-    env = F.one_hot(env).to(torch.float32)
-
-    if shift_type == "fs":
-        sorted_idx = features.sum(dim=1).sort()[1]
-    if shift_type == "ss":
-        sorted_idx = adj.sum(dim=1).sort()[1]
-
-    inv_sorted_idx = sorted_idx.sort()[1]
-    env = env[inv_sorted_idx]
-
-    idx_train = sorted_idx[degree*part : (degree+1)*part]
-    idx_val = sorted_idx[8*part+1 : 10*part]
-    idx_test = sorted_idx[nnode // 2:]
-    return idx_train, idx_val, idx_test, env
+    
 
 def set_seed(seed):
     torch.manual_seed(seed)
