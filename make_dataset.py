@@ -7,12 +7,13 @@ import numpy as np
 def create_raw_dataset(name):
 
     if name in ["cora", "citeseer", "pubmed"]:
+        from torch_geometric.datasets import Planetoid
+        Planetoid(root="Dataset/", name=name)
         adj, features, idx_train, idx_val, idx_test, labels = utils.load_data(name)
 
     elif name in ["chameleon", "squirrel"]:
         import torch_geometric
         from torch_geometric.datasets import WikipediaNetwork
-
         dataset = WikipediaNetwork(root="data", name=name)
         features = dataset.x
         adj = torch_geometric.utils.to_scipy_sparse_matrix(dataset.edge_index).todense().A
@@ -43,7 +44,7 @@ def create_raw_dataset(name):
     environment[idx_train] = 1
     environment = torch.nn.functional.one_hot(environment.to(torch.int64)).to(torch.float32)
     dataset = adj, features, labels, idx_train, idx_val, idx_test, environment
-    torch.save(dataset, f"Dataset/{name}.pth")
+    torch.save(dataset, f"Dataset/{name}_1.pth")
 
 
 def processed_dataset(dataset_name, device):
