@@ -7,7 +7,8 @@ Implementation of the paper "Adaptable Node Alignment for Relieving Distribution
 Generate a dataset with feature shifts:
 
 ```bash
-python make_dataset.py {DATASET}
+python make_dataset.py cora
+python make_dataset.py photo
 ```
 
 **Step 2**
